@@ -324,8 +324,7 @@ void non_recursion_postorder(BinaryTree *tree)
             push_stack(&stack, tmp);
             tmp = tmp->LChild;
         }else{                                      //向右走
-            tmp = pop_stack(&stack);                //取栈顶元素  这里应该是获取栈顶元素，但是不能出栈  王道 P.128
-            push_stack(&stack, tmp);
+            tmp = stack.stroe[stack.top];           //取栈顶元素    王道 P.128
             if(tmp->RChild && tmp->RChild != tag)   //如果右子树存在，且未被访问过
             {
                 tmp = tmp->RChild;                  //转向右子树
