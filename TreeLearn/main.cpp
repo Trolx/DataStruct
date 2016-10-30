@@ -7,7 +7,42 @@ typedef struct BinaryTree{
     struct BinaryTree *LChild;
     struct BinaryTree *RChild;
 }BinaryTree;
-
+/* function content
+ *
+ * BinaryTree *create_tree(BinaryTree *root)
+ * preorder_traverse(BinaryTree *root)
+ * void inorder_traverse(BinaryTree *root)
+ * void postorder_traverse(BinaryTree *root)
+ * int sum_node(BinaryTree *root)
+ * int tree_equal(BinaryTree *T1, BinaryTree *T2)
+ * void destory_tree(BinaryTree *root)
+ * BinaryTree *copy_tree(BinaryTree *root)
+ * void non_recursion_preorder(BinaryTree *root)
+ * void non_recursion_inorder(BinaryTree *root)
+ * void non_recursion_postorder(BinaryTree *root)
+ * void non_recursion_postorder2(BinaryTree *root)
+ * void levelorder(BinaryTree *root)
+ * void invert_levelorder(BinaryTree *root)
+ * int tree_depth(BinaryTree *root)
+ * int tree_depth2(BinaryTree *root)
+ * void search_x_level(BinaryTree *root, Telemtype x)
+ * BinaryTree *pre_in_create_tree(Telemtype A[], Telemtype B[], int startPre, int endPre, int startIn, int endIn)
+ * BinaryTree *pre_in_create_tree2(Telemtype A[], Telemtype B[], int s1, int e1, int s2, int e2)
+ * int is_complete(BinaryTree *root)
+ * int double_son_node(BinaryTree *tree)
+ * void swap_lrchild(BinaryTree *tree)
+ * void swap_lrchild2(BinaryTree *root)
+ * Telemtype search_k_node(BinaryTree *tree, int k)
+ * void destroy_x_tree(BinaryTree *tree, Telemtype x)
+ * void print_ancestor_node(BinaryTree *tree, Telemtype x)
+ * BinaryTree *nearest_comm_ancestor(BinaryTree *tree, Telemtype p, Telemtype q)
+ * int tree_width(BinaryTree *root)
+ * void pre_to_post(Telemtype pre[], int s1, int e1, Telemtype post[], int s2, int e2)
+ * BinaryTree *inorder_List(BinaryTree *root)
+ * void link(BinaryTree *root, BinaryTree *head, BinaryTree *tail)
+ * int is_similar(BinaryTree *T1, BinaryTree *T2)
+ * int WPL(BinaryTree *root)
+ * */
 /*
  * 建树是通过先序遍历的方法进行，先输如一个字符，如果不是‘0’，则进行
  * 树的创建，否则不建树
@@ -647,6 +682,30 @@ void swap_lrchild(BinaryTree *tree)
     }
 }
 /*
+ * 借用队列实现左右子树交换
+ * */
+void swap_lrchild2(BinaryTree *root)
+{
+    BinaryTree *p, *tmp;
+    Tqueue queue;
+    queue.front = queue.rear = 0;
+    if(root)
+        enqueue(&queue, root);
+    while(queue.rear != queue.front)
+    {
+        p = dequeue(&queue);
+        if(p->LChild)
+            enqueue(&queue, p->LChild);
+        if(p->RChild)
+            enqueue(&queue, p->RChild);
+
+        tmp = p->LChild;
+        p->LChild = p->RChild;
+        p->RChild = tmp;
+    }
+
+}
+/*
  * 求先序遍历中的第k个结点的值（确保k值在有效范围内）
  * 1.设置一个全局变量itag记录访问过的结点的序号，其初值是根结点在先序序列中的序号，即为1
  * 2.当二叉树tree为空时，返回特殊结点“#”，当itag == k时，表示找到了满足条件的结点，返回 tree->data
@@ -901,11 +960,11 @@ void pre_to_post(Telemtype pre[], int s1, int e1, Telemtype post[], int s2, int 
  * */
 
 BinaryTree *head, *pre = NULL;
-BinaryTree *inorder(BinaryTree *root)
+BinaryTree *inorder_List(BinaryTree *root)
 {
     if(root)
     {
-        inorder(root->LChild);
+        inorder_List(root->LChild);
         if (!root->LChild && !root->RChild) {
             if (!pre) {
                 head = root;
@@ -914,7 +973,7 @@ BinaryTree *inorder(BinaryTree *root)
                 pre->RChild = root;
                 pre = root;
             }
-            inorder(root->RChild);
+            inorder_List(root->RChild);
             pre->RChild = NULL;
         }
     }
@@ -1023,8 +1082,10 @@ int main()
     preorder_traverse(root2);
     printf("is complete %d\n", is_complete(root));
     printf("double son node is %d\n", double_son_node(root));
-
-    swap_lrchild(root2);
+    printf("\nthe swap_lrChild2\n");
+    swap_lrchild2(tree);
+    preorder_traverse(tree);
+    puts("the end swap_LRChile\n");
     preorder_traverse(root2);
     printf("\n%c\n", search_k_node(root2, 4));
     destroy_x_tree(root2, '2');
